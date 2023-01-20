@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -14,11 +15,23 @@ func main() {
 		return
 	}
 
-http.HandleFunc("/about", func(w, http.ResponseWriter, r *http.Request){
-	var data = M{"name": "batman"}
-	err = tmpl.ExecuteTemplate(w,"index", data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-})
+	http.HandleFunc("/index", func(w http.ResponseWriter, r *http.Request) {
+		var data = M{"name": "batman"}
+		err = tmpl.ExecuteTemplate(w, "index", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
+	http.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
+		var data = M{"name": "batman"}
+		err = tmpl.ExecuteTemplate(w, "about", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+	})
+
+	fmt.Println("Server started at localhost:9000")
+	http.ListenAndServe(":9000", nil)
 }
